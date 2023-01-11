@@ -1,5 +1,6 @@
 import React,{useState} from 'react';
-import Cell from "./Cell"
+import Cell from "./Cell";
+//import Winner from "./Winner";
 const Board = () => {
     const [state, setState] = useState(Array(9).fill(null));
     const [player, setPlayer] = useState(true);
@@ -9,8 +10,29 @@ const Board = () => {
         setState(newState);
         setPlayer(!player);
     }
-    const winner = () => {
-        
+    const win = () => {
+        const WinSeries = [
+            [0,1,2],
+            [3,4,5],
+            [6,7,8],
+            [0,3,6],
+            [1,4,7],
+            [2,5,8],
+            [0,4,8],
+            [2,4,6]
+        ];
+        for(let series of WinSeries){
+            const [a,b,c] = series;
+            if(state[a]!=null && state[a]===state[b]===state[c]){
+                return state[a];
+            }
+        }
+        return false;
+    }
+
+    const winner = win();
+    if(winner !== false){
+        console.log("winner");
     }
     return <div className='board'>
       <div className="row">
