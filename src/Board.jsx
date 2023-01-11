@@ -1,15 +1,10 @@
 import React,{useState} from 'react';
 import Cell from "./Cell";
-//import Winner from "./Winner";
+import Finish from "./Finish";
 const Board = () => {
     const [state, setState] = useState(Array(9).fill(null));
     const [player, setPlayer] = useState(true);
-    const handleClick = (i)=>{
-        const newState = [...state];
-        newState[i] = player?"X":"O";
-        setState(newState);
-        setPlayer(!player);
-    }
+
     const win = () => {
         const WinSeries = [
             [0,1,2],
@@ -23,18 +18,30 @@ const Board = () => {
         ];
         for(let series of WinSeries){
             const [a,b,c] = series;
-            if(state[a]!=null && state[a]===state[b]===state[c]){
+            if(state[a] !== null && state[a]===state[b] && state[a]===state[c]){
                 return state[a];
             }
         }
         return false;
     }
-
     const winner = win();
-    if(winner !== false){
-        console.log("winner");
+    const handleReset = () => {
+        setState(Array(9).fill(null));
     }
-    return <div className='board'>
+    const handleClick = (i)=>{
+        const newState = [...state];
+        newState[i] = player?"X":"O";
+        setState(newState);
+        setPlayer(!player);
+    }
+    
+    return <div className="container">
+        {winner?(
+            <>
+                 <Finish value={winner} onClick={handleReset}/>
+            </>
+        ):(
+            <div className='board'>
       <div className="row">
         <Cell onClick={() => handleClick(0)} value={state[0]} />
         <Cell onClick={() => handleClick(1)} value={state[1]} />
@@ -50,6 +57,8 @@ const Board = () => {
         <Cell onClick={() => handleClick(7)} value={state[7]} />
         <Cell onClick={() => handleClick(8)} value={state[8]} />
       </div>
+    </div>
+        )}
     </div>
 }
 
